@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
-<!--
-  Created using jsbin.com
-  Source can be edited via http://jsbin.com/aPosalO/7/edit
--->
-<head>
-<meta name="description" content="[Canvas sprite animmaton demoadd your bin description]" />
-<meta charset=utf-8 />
-<title>JS Bin</title>
 
-<style id="jsbin-css">
-    /*body {background-image: url("jacko.png"); }*/
-    div {margin:50px 800px; font-family: sans-serif;}
+<head>
+<meta name="description" content="sprite anim test" />
+<meta charset=utf-8 />
+<title>sprite anim test</title>
+
+<style>
+    /*body {background-image: url("img/jacko.png"); }*/
+    div {margin: 0 auto; font-family: sans-serif; width: 800px;}
     canvas {background-color: transparent;/* width:300px; height: 300px;*/}
 </style>
 </head>
@@ -22,6 +19,7 @@
   </div>
 
 <script>
+
 /**********************************/
 var FrameTimer = function() {
     this._lastTick = (new Date()).getTime();
@@ -308,12 +306,12 @@ window.onload = function() {
                     spin.animate(timer.getSeconds());
                     var frame = spin.getSprite();
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(jackoImage, frame.x, frame.y, 92, 170, canvas.width/3, 0, 92, 170);
+                    ctx.drawImage(jackoImage, frame.x, frame.y, 92, 170, canvas.width/2, 0, 92, 170);
                     timer.tick();
                 }, 5);
             };
  
-            jackoImage.src = 'jackospin2.png';
+            jackoImage.src = 'img/jackospin2.png';
         };
 </script>
 </body>

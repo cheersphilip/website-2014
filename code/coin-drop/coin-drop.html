@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/umagib/8/edit
+-->
+<head>
+<meta name="description" content="[sliding falling down game]" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<meta charset=utf-8 />
+<title>Coin Drop - by cheersphilip</title>
+
+<style id="jsbin-css">
+body{
+  height:4000px;
+  font-family: arial, sans-serif;
+  background-color: LightSkyBlue;
+  padding-top: 40px;
+  margin: 0;
+}
+#instructions{
+  height:200px;
+  width:450px;
+  background-color: floralwhite;
+  padding: 50px;
+  border-radius: 15px;
+  font-size: 30px;
+  text-align: center;
+  color: saddlebrown;
+  cursor: pointer;
+  margin: 0 auto;
+  box-shadow: 10px 10px 5px #333;
+}
+.spacer {
+  height: 200px;
+  width: 100%;
+  clear: both;
+}
+.coin {
+  width:100px;
+  height:100px;
+  border-radius:55px;
+  background-color:yellow;
+  color: orange;
+  font-size:80px;
+  text-align:center;
+  border: 5px solid orange;
+  padding-top:5px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.left {
+  margin-left:10%;
+}
+.right {
+  margin-left: 70%;
+}
+
+#sign {
+  position:absolute;
+  bottom: -3950px;
+  left: 30px;
+  height:80px;
+  width:180px;
+  background-color: blue;
+  border-radius: 15px;
+  border: 5px solid white;
+  color: white;
+  text-align: center;
+  padding-top: 40px;
+  font-size: 30px;
+}
+#sign-stick {
+  position:absolute;
+  bottom: -4030px;
+  height:80px;
+  width:18px;
+  background-color: grey;
+  left: 120px;  
+}
+#grass {
+  position:absolute;
+  bottom: -4050px;
+  height:400px;
+  width:100%;
+  background-color: green;
+}
+#again {
+  position: absolute;
+  bottom: -3950px;
+  left: 70%;
+  height:80px;
+  width:180px;
+  background-color: floralwhite;
+  border-radius: 15px;
+  color: saddlebrown;
+  padding:20px;
+  text-align: center;
+  font-size: 30px;
+  transform:rotate(350deg);
+  -ms-transform:rotate(350deg); /* IE 9 */
+  -webkit-transform:rotate(350deg); /* Safari and Chrome */
+  box-shadow: 10px 10px 5px #333;
+  cursor: pointer;
+}
+</style>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30982187-1']);
+  _gaq.push(['_setDomainName', 'philipwatson.co.uk']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+</head>
+<body>
+  <div id="instructions">
+    <p>Click on as many coins as you can while you fall!</p>
+    <p>~ click here to start ~</p>
+  </div>
+  <div class="spacer"></div>
+  <div class="coin">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div class="coin left">&pound;</div>
+  <div class="coin right">&pound;</div>
+  <div id="grass"></div>
+  <div id="sign"></div>
+  <div id="sign-stick"></div>
+  <div id="again">Click to play again</div>
+  
+<script>
+$(document).ready(function(){
+
+  coins=0;
+  function scrollon() {
+  	var i=0;
+  	var myVar = setInterval(function(){
+        window.scrollTo(0,i);
+        i+=2;
+        var fallHeight = document.height - window.innerHeight;
+        if (i>=fallHeight*0.3){
+          i+=1;
+        }
+        if (i>=fallHeight*0.5){
+          i+=2;
+        }
+        if (i>=fallHeight*0.7){
+          i+=5;
+        }
+        if (i>=fallHeight){
+  		i=0;
+  		clearInterval(myVar);
+        }
+  	},5);
+  }
+
+  $("#instructions").click(function(){
+    scrollon();
+    $(".coin").click(function(){
+      if ($(this).css("visibility") === "visible"){
+        coins += 1;
+        $("#sign").text(coins + " coins!");
+        $(this).css("visibility","hidden");
+      }
+    });
+  });
+  
+  $("#again").click(function(){
+    window.scrollTo(0,0);
+    location.reload();
+  });
+  
+});
+</script>
+
+</body>
+</html>
