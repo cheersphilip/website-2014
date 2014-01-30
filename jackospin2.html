@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/aPosalO/7/edit
+-->
+<head>
+<meta name="description" content="[Canvas sprite animmaton demoadd your bin description]" />
+<meta charset=utf-8 />
+<title>JS Bin</title>
+
+<style id="jsbin-css">
+    /*body {background-image: url("jacko.png"); }*/
+    div {margin:50px 800px; font-family: sans-serif;}
+    canvas {background-color: transparent;/* width:300px; height: 300px;*/}
+</style>
+</head>
+<body>
+    <div>
+<h1>Canvas sprite animation demo</h1>
+  <canvas id="canvas" width="300" height="300"></canvas>
+  </div>
+
+<script>
+/**********************************/
+var FrameTimer = function() {
+    this._lastTick = (new Date()).getTime();
+};
+
+FrameTimer.prototype = {
+    getSeconds: function() {
+        var seconds = this._frameSpacing / 1000;
+        if(isNaN(seconds)) {
+            return 0;
+        }
+
+        return seconds;
+    },
+
+    tick: function() {
+        var currentTick = (new Date()).getTime();
+        this._frameSpacing = currentTick - this._lastTick;
+        this._lastTick = currentTick;
+    }
+};
+
+/**********************************/
+
+var SpriteSheet = function(data) {
+    this.load(data);
+};
+
+SpriteSheet.prototype = {
+    _sprites: [],
+    _width: 0,
+    _height: 0,
+
+    load: function(data) {
+        this._height = data.height;
+        this._width = data.width;
+        this._sprites = data.sprites;
+    },
+
+    getOffset: function(spriteName) {
+        for(var i = 0, len = this._sprites.length; i < len; i++) {
+            var sprite = this._sprites[i];
+
+            if(sprite.name == spriteName) {
+                return {
+                    x: (i * this._width) + (sprite.x||0),
+                    y: (sprite.y||0),
+                    width: this._width,
+                    height: this._height
+                };
+            }
+        }
+        
+        return null;
+    }
+};
+/**********************************/
+
+var Animation = function(data, sprites) {
+    this.load(data);
+    this._sprites = sprites;
+};
+
+Animation.prototype = {
+    _frames: [],
+    _frame: null,
+    _frameDuration: 0,
+
+    load: function(data) {
+        this._frames = data;
+        this._frameIndex = 0;
+        this._frameDuration = data[0].time;
+    },
+
+    animate: function(deltaTime) {
+        this._frameDuration -= deltaTime;
+
+        if(this._frameDuration <= 0) {
+            this._frameIndex++;
+            if(this._frameIndex == this._frames.length) {
+                this._frameIndex = 0;
+            }
+
+            this._frameDuration = this._frames[this._frameIndex].time;
+        }
+    },
+
+    getSprite: function() {
+        return this._sprites.getOffset(this._frames[this._frameIndex].sprite);
+    }
+};
+/**********************************/
+
+
+
+window.onload = function() {
+            var timer = new FrameTimer();
+            timer.tick();
+ 
+            var sprites = new SpriteSheet({
+                width: 92,
+                height: 170,
+                sprites: [
+                    { name: 'spin_1', x: 0, y: 0 },
+                    { name: 'spin_2', x: 0, y: 0 },
+                    { name: 'spin_3', x: 0, y: 0 },
+                    { name: 'spin_4', x: 0, y: 0 },
+                    { name: 'spin_5', x: 0, y: 0 },
+                    { name: 'spin_6', x: 0, y: 0 },
+                    { name: 'spin_7', x: 0, y: 0 },
+                    { name: 'spin_8', x: 0, y: 0 },
+                    { name: 'spin_9', x: 0, y: 0 },
+                    { name: 'spin_10', x: 0, y: 0 },
+                    { name: 'spin_11', x: 0, y: 0 },
+                    { name: 'spin_12', x: 0, y: 0 },
+                    { name: 'spin_13', x: 0, y: 0 },
+                    { name: 'spin_14', x: 0, y: 0 },
+                    { name: 'spin_15', x: 0, y: 0 },
+                    { name: 'spin_16', x: 0, y: 0 },
+                    { name: 'spin_17', x: 0, y: 0 },
+                    { name: 'spin_18', x: 0, y: 0 },
+                    { name: 'spin_19', x: 0, y: 0 },
+                    { name: 'spin_20', x: 0, y: 0 },
+                    { name: 'spin_21', x: 0, y: 0 },
+                    { name: 'spin_22', x: 0, y: 0 },
+                    { name: 'spin_23', x: 0, y: 0 },
+                    { name: 'spin_24', x: 0, y: 0 },
+                    { name: 'spin_25', x: 0, y: 0 },
+                    { name: 'spin_26', x: 0, y: 0 },
+                    { name: 'spin_27', x: 0, y: 0 },
+                    { name: 'spin_28', x: 0, y: 0 },
+                    { name: 'spin_29', x: 0, y: 0 },
+                    { name: 'spin_30', x: 0, y: 0 },
+                    { name: 'spin_31', x: 0, y: 0 },
+                    { name: 'spin_32', x: 0, y: 0 },
+                    { name: 'spin_33', x: 0, y: 0 },
+                    { name: 'spin_34', x: 0, y: 0 },
+                    { name: 'spin_35', x: 0, y: 0 },
+                    { name: 'spin_36', x: 0, y: 0 },
+                    { name: 'spin_37', x: 0, y: 0 },
+                    { name: 'spin_38', x: 0, y: 0 },
+                    { name: 'spin_39', x: 0, y: 0 },
+                    { name: 'spin_40', x: 0, y: 0 },
+                    { name: 'spin_41', x: 0, y: 0 },
+                    { name: 'spin_42', x: 0, y: 0 },
+                    { name: 'spin_43', x: 0, y: 0 },
+                    { name: 'spin_44', x: 0, y: 0 },
+                    { name: 'spin_45', x: 0, y: 0 },
+                    { name: 'spin_46', x: 0, y: 0 },
+                    { name: 'spin_47', x: 0, y: 0 },
+                    { name: 'spin_48', x: 0, y: 0 },
+                    { name: 'spin_49', x: 0, y: 0 },
+                    { name: 'spin_50', x: 0, y: 0 },
+                    { name: 'spin_51', x: 0, y: 0 },
+                    { name: 'spin_52', x: 0, y: 0 },
+                    { name: 'spin_53', x: 0, y: 0 },
+                    { name: 'spin_54', x: 0, y: 0 },
+                    { name: 'spin_55', x: 0, y: 0 },
+                    { name: 'spin_56', x: 0, y: 0 },
+                    { name: 'spin_57', x: 0, y: 0 },
+                    { name: 'spin_58', x: 0, y: 0 },
+                    { name: 'spin_59', x: 0, y: 0 },
+                    { name: 'spin_60', x: 0, y: 0 },
+                    { name: 'spin_61', x: 0, y: 0 },
+                    { name: 'spin_62', x: 0, y: 0 },
+                    { name: 'spin_63', x: 0, y: 0 },
+                    { name: 'spin_64', x: 0, y: 0 },
+                    { name: 'spin_65', x: 0, y: 0 },
+                    { name: 'spin_66', x: 0, y: 0 },
+                    { name: 'spin_67', x: 0, y: 0 },
+                    { name: 'spin_68', x: 0, y: 0 },
+                    { name: 'spin_69', x: 0, y: 0 },
+                    { name: 'spin_70', x: 0, y: 0 },
+                    { name: 'spin_71', x: 0, y: 0 },
+                    { name: 'spin_72', x: 0, y: 0 },
+                    { name: 'spin_73', x: 0, y: 0 },
+                    { name: 'spin_74', x: 0, y: 0 },
+                    { name: 'spin_75', x: 0, y: 0 },
+                    { name: 'spin_76', x: 0, y: 0 },
+                    { name: 'spin_77', x: 0, y: 0 },
+                    { name: 'spin_78', x: 0, y: 0 },
+                    { name: 'spin_79', x: 0, y: 0 },
+                    { name: 'spin_80', x: 0, y: 0 },
+                    { name: 'spin_81', x: 0, y: 0 },
+                    { name: 'spin_82', x: 0, y: 0 },
+                    { name: 'spin_83', x: 0, y: 0 },
+                    { name: 'spin_84', x: 0, y: 0 }
+                ]
+            });
+            var ctx = document.getElementById('canvas').getContext('2d');
+            var walk = new Animation([
+                    { sprite: 'spin_1', time: 0.1 },
+                    { sprite: 'spin_2', time: 0.1 },
+                    { sprite: 'spin_3', time: 0.15 },
+                    { sprite: 'spin_4', time: 0.1 },
+                    { sprite: 'spin_5', time: 0.1 },
+                    { sprite: 'spin_6', time: 0.2 },
+                    { sprite: 'spin_7', time: 0.1 }
+            ], sprites);
+            var spin = new Animation([
+                    { sprite: 'spin_1', time: 0.3 },
+                    { sprite: 'spin_8', time: 0.1 },
+                    { sprite: 'spin_9', time: 0.1 },
+                    { sprite: 'spin_10', time: 0.1 },
+                    { sprite: 'spin_11', time: 0.1 },
+                    { sprite: 'spin_12', time: 0.1 },
+                    { sprite: 'spin_13', time: 0.1 },
+                    { sprite: 'spin_14', time: 0.1 },
+                    { sprite: 'spin_15', time: 0.1 },
+                    { sprite: 'spin_16', time: 0.1 },
+                    { sprite: 'spin_17', time: 0.1 },
+                    { sprite: 'spin_18', time: 0.1 },
+                    { sprite: 'spin_19', time: 0.1 },
+                    { sprite: 'spin_20', time: 0.1 },
+                    { sprite: 'spin_21', time: 0.1 },
+                    { sprite: 'spin_22', time: 0.1 },
+                    { sprite: 'spin_23', time: 0.1 },
+                    { sprite: 'spin_24', time: 0.1 },
+                    { sprite: 'spin_25', time: 0.1 },
+                    { sprite: 'spin_26', time: 0.1 },
+                    { sprite: 'spin_27', time: 0.1 },
+                    { sprite: 'spin_28', time: 0.1 },
+                    { sprite: 'spin_29', time: 0.1 },
+                    { sprite: 'spin_30', time: 0.1 },
+                    { sprite: 'spin_31', time: 0.1 },
+                    { sprite: 'spin_32', time: 0.1 },
+                    { sprite: 'spin_33', time: 0.1 },
+                    { sprite: 'spin_34', time: 0.1 },
+                    { sprite: 'spin_35', time: 0.1 },
+                    { sprite: 'spin_36', time: 0.1 },
+                    { sprite: 'spin_37', time: 0.1 },
+                    { sprite: 'spin_38', time: 0.1 },
+                    { sprite: 'spin_39', time: 0.1 },
+                    { sprite: 'spin_40', time: 0.1 },
+                    { sprite: 'spin_41', time: 0.1 },
+                    { sprite: 'spin_42', time: 0.1 },
+                    { sprite: 'spin_43', time: 0.1 },
+                    { sprite: 'spin_44', time: 0.1 },
+                    { sprite: 'spin_45', time: 0.1 },
+                    { sprite: 'spin_46', time: 0.1 },
+                    { sprite: 'spin_47', time: 0.1 },
+                    { sprite: 'spin_48', time: 0.1 },
+                    { sprite: 'spin_49', time: 0.1 },
+                    { sprite: 'spin_50', time: 0.1 },
+                    { sprite: 'spin_51', time: 0.1 },
+                    { sprite: 'spin_52', time: 0.1 },
+                    { sprite: 'spin_53', time: 0.1 },
+                    { sprite: 'spin_54', time: 0.1 },
+                    { sprite: 'spin_55', time: 0.1 },
+                    { sprite: 'spin_56', time: 0.1 },
+                    { sprite: 'spin_57', time: 0.1 },
+                    { sprite: 'spin_58', time: 0.1 },
+                    { sprite: 'spin_59', time: 0.1 },
+                    { sprite: 'spin_60', time: 0.1 },
+                    { sprite: 'spin_61', time: 0.1 },
+                    { sprite: 'spin_62', time: 0.1 },
+                    { sprite: 'spin_63', time: 0.1 },
+                    { sprite: 'spin_64', time: 0.1 },
+                    { sprite: 'spin_65', time: 0.1 },
+                    { sprite: 'spin_66', time: 0.1 },
+                    { sprite: 'spin_67', time: 0.1 },
+                    { sprite: 'spin_68', time: 0.1 },
+                    { sprite: 'spin_69', time: 0.1 },
+                    { sprite: 'spin_70', time: 0.1 },
+                    { sprite: 'spin_71', time: 0.1 },
+                    { sprite: 'spin_72', time: 0.1 },
+                    { sprite: 'spin_73', time: 0.1 },
+                    { sprite: 'spin_74', time: 0.1 },
+                    { sprite: 'spin_75', time: 0.1 },
+                    { sprite: 'spin_76', time: 0.1 },
+                    { sprite: 'spin_77', time: 0.1 },
+                    { sprite: 'spin_78', time: 0.1 },
+                    { sprite: 'spin_79', time: 0.1 },
+                    { sprite: 'spin_80', time: 0.1 },
+                    { sprite: 'spin_81', time: 0.1 },
+                    { sprite: 'spin_82', time: 0.1 },
+                    { sprite: 'spin_83', time: 0.1 },
+                    { sprite: 'spin_84', time: 0.1 }
+            ], sprites);
+            var jackoImage = new Image();
+ 
+            jackoImage.onload = function() {
+                setInterval(function(){
+                    spin.animate(timer.getSeconds());
+                    var frame = spin.getSprite();
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(jackoImage, frame.x, frame.y, 92, 170, canvas.width/3, 0, 92, 170);
+                    timer.tick();
+                }, 5);
+            };
+ 
+            jackoImage.src = 'jackospin2.png';
+        };
+</script>
+</body>
+</html>
