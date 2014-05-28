@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/jerid/2/edit
+-->
+<head>
+<meta name="description" content="point in a polygon test 3" />
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+
+<style id="jsbin-css">
+canvas {
+  background-color:lightblue;
+  margin:0;
+}
+/* body {margin: 0; padding: 0;} */
+</style>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+  <p id="result"></p>
+<script>
+var canv=document.getElementById("myCanvas");
+var ctx=canv.getContext("2d");
+
+var polygons = [
+  [
+    [50,50],
+    [100,80],
+    [50,110],
+    [80,80]
+  ],[
+    [250,50],
+    [290,90],
+    [200,100],
+    [190,90]
+  ],[
+    [130,30],
+    [140,40],
+    [150,30],
+    [130,20]
+  ]
+];
+
+function insidePoly(pointx, pointy) {
+  var inside = false;
+  polygons.forEach(function(polygon){
+    var i,j;
+    for (i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      if( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) inside = !inside;
+    }
+  });
+  return inside;
+}
+
+window.onclick=function(e){
+  var xpos = e.clientX-canv.offsetLeft;
+  var ypos = e.clientY-canv.offsetTop;
+  var txt = insidePoly(xpos,ypos);
+  document.getElementById("result").innerHTML = txt + " x: " + xpos + " y: " + ypos;
+};
+
+var drawPoly = function(){
+  polygons.forEach(function(polygon){
+    ctx.beginPath(); 
+    ctx.moveTo(polygon[0][0],polygon[0][1]);
+    polygon.forEach(function(vertex){
+      ctx.lineTo(vertex[0],vertex[1]);
+    });
+    ctx.lineTo(polygon[0][0],polygon[0][1]);
+    ctx.stroke();
+  });
+};
+
+document.onload = drawPoly();
+</script>
+</body>
+</html>
