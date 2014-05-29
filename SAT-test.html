@@ -29,14 +29,14 @@ var polygons = [
     [50,50],
     [100,80],
     [50,110],
-    [80,80]
+    [30,90]
   ],[
-    [250,50],
-    [290,90],
-    [200,100],
-    [190,90]
+    [150,80],
+    [190,90],
+    [200,60],
+    [190,50]
   ],[
-    [130,30],
+    [30,30],
     [140,40],
     [150,30],
     [130,20]
@@ -44,13 +44,14 @@ var polygons = [
 ];
 
 function insidePoly(pointx, pointy) {
-  var inside = false;
+  var inside;
   polygons.forEach(function(polygon){
     var i,j;
     for (i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      if( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) inside = !inside;
+      if( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) inside = polygon;//!inside;
     }
   });
+
   return inside;
 }
 
@@ -58,7 +59,7 @@ window.onclick=function(e){
   var xpos = e.clientX-canv.offsetLeft;
   var ypos = e.clientY-canv.offsetTop;
   var txt = insidePoly(xpos,ypos);
-  document.getElementById("result").innerHTML = txt + " x: " + xpos + " y: " + ypos;
+  document.getElementById("result").innerHTML = "polygon " + txt + ", x: " + xpos + " y: " + ypos;
 };
 
 var drawPoly = function(){
