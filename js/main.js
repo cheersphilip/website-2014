@@ -85,6 +85,62 @@ var EverythingReady = false;
 
 window.onload = function() {
 
+//---------- code for scrolling through banner images so I can choose which to use --------------//
+
+  var images = document.images;
+  var numImages = images.length;
+  var lastIndex = numImages-1;
+  console.log(numImages);
+  for (i=1;i<numImages;i++){
+    images[i].style.visibility="hidden";
+  }
+  images[0].style.visibility="visible";
+  for (i=0;i<numImages;i++){
+    console.log(images[i].style.visibility);
+  }
+  
+  var prev = document.getElementById("banner_prev");
+  var next = document.getElementById("banner_next");
+  
+  next.onclick=function(){
+    console.log("+++++++++++++");
+    for ( i = 0; i < numImages; i++ ){
+    console.log(images[i].style.visibility);
+      if (images[i].style.visibility === "visible"){
+        images[i].style.visibility="hidden";
+        if (i === lastIndex) {
+          images[0].style.visibility="visible";
+          return;
+        } else {
+          images[i+1].style.visibility="visible";
+          return;
+        }
+      }
+    }
+  };
+  
+  prev.onclick=function(){
+    console.log("--------------");
+    for ( i = 0; i < numImages; i++ ){
+      console.log(images[i].style.visibility);
+      if (images[i].style.visibility === "visible"){
+        images[i].style.visibility="hidden";
+        if (i === 0) {
+          images[lastIndex].style.visibility="visible";
+          return;
+        } else {
+          images[i-1].style.visibility="visible";
+          return;
+        }
+      }
+    }   
+  };
+
+//------------ end banner scrolling --------------------------------------------------------------//
+
+
+
+
   // Create the canvas
   var canvas = document.createElement("canvas");
   var ctx = canvas.getContext("2d");
