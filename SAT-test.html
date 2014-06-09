@@ -55,12 +55,32 @@ function insidePoly(pointx, pointy) {
   return inside;
 }
 
-window.onclick=function(e){
+// first attempt at tough hit detection
+ // canv.addEventListener("touchend", function(e){
+ //  var xpos = e.clientX-canv.offsetLeft;
+ //  var ypos = e.clientY-canv.offsetTop;
+ //  var txt = insidePoly(xpos,ypos);
+ //  document.getElementById("result").innerHTML = "polygon " + txt + ", x: " + xpos + " y: " + ypos;
+ // }, false)
+
+//the mouse hit detection
+// canv.addEventListener("click", function(e){
+//   var xpos = e.clientX-canv.offsetLeft;
+//   var ypos = e.clientY-canv.offsetTop;
+//   var txt = insidePoly(xpos,ypos);
+//   document.getElementById("result").innerHTML = "polygon " + txt + ", x: " + xpos + " y: " + ypos;
+// }, false)
+
+//first attempt at DRY hit detection
+var doHitDetection = function(e){
   var xpos = e.clientX-canv.offsetLeft;
   var ypos = e.clientY-canv.offsetTop;
   var txt = insidePoly(xpos,ypos);
   document.getElementById("result").innerHTML = "polygon " + txt + ", x: " + xpos + " y: " + ypos;
 };
+canv.addEventListener("touchend", function(e){doHitDetection(e)}, false);
+canv.addEventListener("click", function(e){doHitDetection(e)}, false);
+
 
 var drawPoly = function(){
   polygons.forEach(function(polygon){
