@@ -148,12 +148,22 @@ window.onload = function() {
   canvas.height = 832;
   document.body.appendChild(canvas);
 
+
   var timer = new FrameTimer();
   timer.tick();
+
+  var drawTitle = function(){
+  //-----trying some font stuff ----//
+  ctx.font='72px "Cabin Sketch"';
+  ctx.textAlign="center";
+  ctx.textBaseline="top"; 
+  ctx.fillText("Why this website is like my car...",canvas.width/2,50);
+  }
 
   var drawCar = function(){
       ctx.clearRect(0, 0, 1155, 832);
       ctx.drawImage(carImage, 0, 0, 1155, 832);
+      drawTitle();
   }
 
   if(carImageReady) {
@@ -651,5 +661,3 @@ console.log(xIn.value);
 
 
 };
-
-
