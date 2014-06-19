@@ -87,54 +87,54 @@ window.onload = function() {
 
 //---------- code for scrolling through banner images so I can choose which to use --------------//
 
-  var images = document.images;
-  var numImages = images.length;
-  var lastIndex = numImages-1;
-  console.log(numImages);
-  for (i=1;i<numImages;i++){
-    images[i].style.visibility="hidden";
-  }
-  images[0].style.visibility="visible";
-  for (i=0;i<numImages;i++){
-    console.log(images[i].style.visibility);
-  }
+  // var images = document.images;
+  // var numImages = images.length;
+  // var lastIndex = numImages-1;
+  // console.log(numImages);
+  // for (i=1;i<numImages;i++){
+  //   images[i].style.visibility="hidden";
+  // }
+  // images[0].style.visibility="visible";
+  // for (i=0;i<numImages;i++){
+  //   console.log(images[i].style.visibility);
+  // }
   
-  var prev = document.getElementById("banner_prev");
-  var next = document.getElementById("banner_next");
+  // var prev = document.getElementById("banner_prev");
+  // var next = document.getElementById("banner_next");
   
-  next.onclick=function(){
-    console.log("+++++++++++++");
-    for ( i = 0; i < numImages; i++ ){
-    console.log(images[i].style.visibility);
-      if (images[i].style.visibility === "visible"){
-        images[i].style.visibility="hidden";
-        if (i === lastIndex) {
-          images[0].style.visibility="visible";
-          return;
-        } else {
-          images[i+1].style.visibility="visible";
-          return;
-        }
-      }
-    }
-  };
+  // next.onclick=function(){
+  //   console.log("+++++++++++++");
+  //   for ( i = 0; i < numImages; i++ ){
+  //   console.log(images[i].style.visibility);
+  //     if (images[i].style.visibility === "visible"){
+  //       images[i].style.visibility="hidden";
+  //       if (i === lastIndex) {
+  //         images[0].style.visibility="visible";
+  //         return;
+  //       } else {
+  //         images[i+1].style.visibility="visible";
+  //         return;
+  //       }
+  //     }
+  //   }
+  // };
   
-  prev.onclick=function(){
-    console.log("--------------");
-    for ( i = 0; i < numImages; i++ ){
-      console.log(images[i].style.visibility);
-      if (images[i].style.visibility === "visible"){
-        images[i].style.visibility="hidden";
-        if (i === 0) {
-          images[lastIndex].style.visibility="visible";
-          return;
-        } else {
-          images[i-1].style.visibility="visible";
-          return;
-        }
-      }
-    }   
-  };
+  // prev.onclick=function(){
+  //   console.log("--------------");
+  //   for ( i = 0; i < numImages; i++ ){
+  //     console.log(images[i].style.visibility);
+  //     if (images[i].style.visibility === "visible"){
+  //       images[i].style.visibility="hidden";
+  //       if (i === 0) {
+  //         images[lastIndex].style.visibility="visible";
+  //         return;
+  //       } else {
+  //         images[i-1].style.visibility="visible";
+  //         return;
+  //       }
+  //     }
+  //   }   
+  // };
 
 //------------ end banner scrolling --------------------------------------------------------------//
 
@@ -152,12 +152,18 @@ window.onload = function() {
   var timer = new FrameTimer();
   timer.tick();
 
+
+  var xIn = document.getElementById("input-x");
+  var yIn = document.getElementById("input-y");
+  console.log(xIn.value);
+  //document.getElementById("input-y").onchange=function(){drawCar()};
+
   var drawTitle = function(){
   //-----trying some font stuff ----//
   ctx.font='72px "Cabin Sketch"';
   ctx.textAlign="center";
   ctx.textBaseline="top"; 
-  ctx.fillText("Why this website is like my car...",canvas.width/2,50);
+  ctx.fillText("Why this website is like my car...",canvas.width/2,80);
   }
 
   var drawCar = function(){
@@ -174,9 +180,6 @@ window.onload = function() {
   EverythingReady = true;
 };
 
-var xIn = document.getElementById("input-x");
-var yIn = document.getElementById("input-y");
-console.log(xIn.value);
 
 
 //////////////// alignment functions //////////////////////
@@ -373,9 +376,11 @@ console.log(xIn.value);
 
 // Probably need a separate file to practice hit detection using SAT or whatever.
 
-// Also of use would be a'reminder' funcation that sees if any time has elapsed since a click, then flashes the uncompleted 
+// Also of use would be a'reminder' function that sees if any time has elapsed since a click, then flashes the uncompleted 
 // animation 'inverses' as a hint. Maybe.
 
+//////////////19/6/2014////// thoughts:
+// bags of data can include text string for display when animation has run
 
 
 //////////////// show all the things! //////////////////
