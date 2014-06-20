@@ -22,24 +22,47 @@ canvas {
   <p id="result"></p>
 <script>
 var canv=document.getElementById("myCanvas");
+canv.width=400;
+canv.height=300;
 var ctx=canv.getContext("2d");
 
 var polygons = [
   [
+    [50,10],
+    [60,30],
+    [80,20],
+    [70,40],
+    [80,60],
     [50,50],
-    [100,80],
-    [50,110],
-    [30,90]
+    [20,60],
+    [40,40],
+    [10,20],
+    [40,30]
   ],[
-    [150,80],
-    [190,90],
-    [200,60],
-    [190,50]
+    [150,70],
+    [170,80],
+    [170,110],
+    [140,120],
+    [130,100],
+    [130,80]
   ],[
-    [30,30],
-    [140,40],
-    [150,30],
-    [130,20]
+    [130,160],
+    [170,150],
+    [180,190],
+    [170,230],
+    [130,200]
+  ],[
+    [260,140],
+    [260,170],
+    [220,180],
+    [210,170],
+    [200,140]
+  ],[
+    [300,90],
+    [320,140],
+    [300,160],
+    [290,150],
+    [280,110]
   ]
 ];
 
@@ -48,31 +71,22 @@ function insidePoly(pointx, pointy) {
   polygons.forEach(function(polygon){
     var i,j;
     for (i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      if( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) inside = polygon;//!inside;
-    }
-  });
+      if( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) {
+        
+        inside = polygon;//!inside;
+        
+        //redraw the selected polygon in a diferent colour
+        drawSinglePoly(polygon);
+      
+      } // end of 'if'
+    } //end of 'for'
+  });//end of 'foreach'
 
   return inside;
 }
 
-// first attempt at tough hit detection
- // canv.addEventListener("touchend", function(e){
- //  var xpos = e.clientX-canv.offsetLeft;
- //  var ypos = e.clientY-canv.offsetTop;
- //  var txt = insidePoly(xpos,ypos);
- //  document.getElementById("result").innerHTML = "polygon " + txt + ", x: " + xpos + " y: " + ypos;
- // }, false)
-
-//the mouse hit detection
-// canv.addEventListener("click", function(e){
-//   var xpos = e.clientX-canv.offsetLeft;
-//   var ypos = e.clientY-canv.offsetTop;
-//   var txt = insidePoly(xpos,ypos);
-//   document.getElementById("result").innerHTML = "polygon " + txt + ", x: " + xpos + " y: " + ypos;
-// }, false)
-
-//first attempt at DRY hit detection
 var doHitDetection = function(e){
+  drawPoly();
   var xpos = e.clientX-canv.offsetLeft;
   var ypos = e.clientY-canv.offsetTop;
   var txt = insidePoly(xpos,ypos);
@@ -81,8 +95,37 @@ var doHitDetection = function(e){
 canv.addEventListener("touchend", function(e){doHitDetection(e)}, false);
 canv.addEventListener("click", function(e){doHitDetection(e)}, false);
 
+var drawSinglePoly = function(polygon){
+  ctx.beginPath(); 
+  ctx.moveTo(polygon[0][0],polygon[0][1]);
+  polygon.forEach(function(vertex){
+    ctx.lineTo(vertex[0],vertex[1]);
+  });
+  ctx.lineTo(polygon[0][0],polygon[0][1]);
+  ctx.strokeStyle="#FF0000";
+  ctx.stroke();
+};
 
 var drawPoly = function(){
+  //reset the canvas
+  canv.width=canv.width;
+
+  //draw lines for reference
+  ctx.beginPath();
+  ctx.moveTo(0,90);
+  ctx.lineTo(400,90);
+  ctx.moveTo(400,120);
+  ctx.lineTo(0,120);
+  ctx.moveTo(400,140);
+  ctx.lineTo(0,140);
+  ctx.moveTo(0,150);
+  ctx.lineTo(400,150);
+  ctx.moveTo(400,160);
+  ctx.lineTo(0,160);
+  ctx.strokeStyle="#c0c0c0";
+  ctx.stroke();
+
+  //draw polygons
   polygons.forEach(function(polygon){
     ctx.beginPath(); 
     ctx.moveTo(polygon[0][0],polygon[0][1]);
@@ -90,6 +133,7 @@ var drawPoly = function(){
       ctx.lineTo(vertex[0],vertex[1]);
     });
     ctx.lineTo(polygon[0][0],polygon[0][1]);
+    ctx.strokeStyle="#000000";
     ctx.stroke();
   });
 };
