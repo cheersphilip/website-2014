@@ -7,7 +7,7 @@
 <head>
 <meta name="description" content="point in a polygon test 3" />
   <meta charset="utf-8">
-  <title>JS Bin</title>
+  <title>SAT Test</title>
 
 <style id="jsbin-css">
 canvas {
@@ -66,19 +66,25 @@ var polygons = [
   ]
 ];
 
+polygons[0].name="star";
+polygons[1].name="top left";
+polygons[2].name="bottom left";
+polygons[3].name="middle";
+polygons[4].name="right";
+
 function insidePoly(pointx, pointy) {
-  var inside;
+  var inside = "not selected";
   polygons.forEach(function(polygon){
     var i,j;
     for (i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      if( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) {
+      if ( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) {
         
-        inside = polygon;//!inside;
-        
+        inside = polygon["name"];
+
         //redraw the selected polygon in a diferent colour
         drawSinglePoly(polygon);
       
-      } // end of 'if'
+      }// end of 'if'
     } //end of 'for'
   });//end of 'foreach'
 
