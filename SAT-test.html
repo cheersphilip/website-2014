@@ -72,36 +72,52 @@ polygons[2].name="bottom left";
 polygons[3].name="middle";
 polygons[4].name="right";
 
+// thanks to http://stackoverflow.com/a/17490457 for this function
 function insidePoly(pointx, pointy) {
-  var inside = "not selected";
+  var inside = false;
   polygons.forEach(function(polygon){
     var i,j;
     for (i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      if ( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) {
-        
-        inside = polygon["name"];
-
-        //redraw the selected polygon in a diferent colour
-        drawSinglePoly(polygon);
-      
-      }// end of 'if'
-    } //end of 'for'
-  });//end of 'foreach'
-
+      if( ((polygon[i][1] > pointy) != (polygon[j][1] > pointy)) && (pointx < (polygon[j][0]-polygon[i][0]) * (pointy-polygon[i][1]) / (polygon[j][1]-polygon[i][1]) + polygon[i][0]) ) inside = !inside;
+    }
+  })
   return inside;
 }
 
-var doHitDetection = function(e){
+// but then I had to add in this function, as you can't exit a foreach.
+// It's a complicated way as I couldn't get this one to stop detecting hits
+// when the click was to the right (and outside) of a given polygon, so it's
+// only called after insidePoly.
+function insideWhichPoly(pointx, pointy) {
+  for (var k=0; k<polygons.length; k++){  
+    var i,j;
+    for (i = 0, j = polygons[k].length - 1; i < polygons[k].length; j = i++) {
+      if ( 
+          ((polygons[k][i][1] > pointy) != (polygons[k][j][1] > pointy)) && 
+          (pointx < (polygons[k][j][0]-polygons[k][i][0]) * (pointy-polygons[k][i][1]) / (polygons[k][j][1]-polygons[k][i][1]) + polygons[k][i][0]) 
+          ) {
+        drawSinglePoly(polygons[k]);
+        return polygons[k]["name"];
+      }
+    } 
+  }
+}
+
+function doHitDetection(e){
   drawPoly();
   var xpos = e.clientX-canv.offsetLeft;
   var ypos = e.clientY-canv.offsetTop;
-  var txt = insidePoly(xpos,ypos);
+  var txt = "miss";
+  if (insidePoly(xpos,ypos)) {
+    txt = insideWhichPoly(xpos,ypos);
+  }
   document.getElementById("result").innerHTML = "polygon " + txt + ", x: " + xpos + " y: " + ypos;
 };
+
 canv.addEventListener("touchend", function(e){doHitDetection(e)}, false);
 canv.addEventListener("click", function(e){doHitDetection(e)}, false);
 
-var drawSinglePoly = function(polygon){
+function drawSinglePoly(polygon){
   ctx.beginPath(); 
   ctx.moveTo(polygon[0][0],polygon[0][1]);
   polygon.forEach(function(vertex){
@@ -112,7 +128,7 @@ var drawSinglePoly = function(polygon){
   ctx.stroke();
 };
 
-var drawPoly = function(){
+function drawPoly(){
   //reset the canvas
   canv.width=canv.width;
 
