@@ -6,71 +6,150 @@
 -->
 <head>
 <meta name="description" content="point in a polygon test 3" />
-  <meta charset="utf-8">
-  <title>SAT Test</title>
+<meta charset="utf-8">
+<title>SAT Test</title>
 
 <style id="jsbin-css">
-canvas {
-  background-color:lightblue;
+/*canvas {
   margin:0;
-}
+}*/
 /* body {margin: 0; padding: 0;} */
 </style>
 </head>
 <body>
-  <canvas id="myCanvas"></canvas>
-  <p id="result"></p>
+  <p id="result">SAT test - click to select a shape on the car!</p>
 <script>
-var canv=document.getElementById("myCanvas");
-canv.width=400;
-canv.height=300;
-var ctx=canv.getContext("2d");
+
+// Create the canvas
+var canv = document.createElement("canvas");
+var ctx = canv.getContext("2d");
+canv.width = 1155;
+canv.height = 832;
+document.body.appendChild(canv);
+
+var carImageReady = false;
+var carImage = new Image();
+carImage.src = 'img/mycar.jpg';
+carImage.onload = function() {
+  carImageReady = true;
+  // ctx.drawImage(carImage, 0, 0, 1155, 832);
+  drawPoly();
+}
+
+var drawCar = function(){
+    ctx.clearRect(0, 0, 1155, 832);
+    ctx.drawImage(carImage, 0, 0, 1155, 832);
+}
+
+// if(carImageReady) {
+//   drawCar();
+// };
 
 var polygons = [
-  [
-    [50,10],
-    [60,30],
-    [80,20],
-    [70,40],
-    [80,60],
-    [50,50],
-    [20,60],
-    [40,40],
-    [10,20],
-    [40,30]
-  ],[
-    [150,70],
-    [170,80],
-    [170,110],
-    [140,120],
-    [130,100],
-    [130,80]
-  ],[
-    [130,160],
-    [170,150],
-    [180,190],
-    [170,230],
-    [130,200]
-  ],[
-    [260,140],
-    [260,170],
-    [220,180],
-    [210,170],
-    [200,140]
-  ],[
-    [300,90],
-    [320,140],
-    [300,160],
-    [290,150],
-    [280,110]
+  [//FUEL CAP
+    [331,377],
+    [338,381],
+    [341,396],
+    [334,401],
+    [327,398],
+    [325,393],
+    [325,385],
+    [328,380]
+  ],[//WHEEL
+    [329,416],
+    [357,432],
+    [365,456],
+    [375,479],
+    [375,489],
+    [359,506],
+    [347,511],
+    [314,512],
+    [299,500],
+    [292,487],
+    [290,470],
+    [289,452],
+    [291,439],
+    [302,423],
+    [316,418]
+  ],[//SIDE
+    [367,352],
+    [376,356],
+    [490,388],
+    [556,399],
+    [614,404],
+    [641,402],
+    [659,418],
+    [667,451],
+    [682,467],
+    [657,468],
+    [626,485],
+    [609,474],
+    [595,472],
+    [576,478],
+    [560,493],
+    [553,510],
+    [544,524],
+    [531,526],
+    [380,489],
+    [378,481],
+    [373,477],
+    [361,422],
+    [364,372]
+  ],[//WINDOW
+    [389,274],
+    [450,277],
+    [524,297],
+    [584,354],
+    [618,401],
+    [545,395],
+    [445,372],
+    [356,347],
+    [327,336],
+    [339,319]
+  ],[//ROOF
+    [387,263],
+    [488,247],
+    [540,247],
+    [614,254],
+    [650,261],
+    [592,268],
+    [541,281],
+    [530,288],
+    [481,277],
+    [434,268],
+    [396,266]
+  ],[//WINDSCREEN
+    [654,267],
+    [727,303],
+    [814,362],
+    [751,375],
+    [647,380],
+    [576,326],
+    [541,296],
+    [537,290],
+    [540,285],
+    [590,273]
+  ],[//BONNET
+    [815,365],
+    [865,404],
+    [870,423],
+    [876,434],
+    [826,449],
+    [747,458],
+    [721,457],
+    [649,381],
+    [710,383],
+    [754,380]
   ]
 ];
 
-polygons[0].name="star";
-polygons[1].name="top left";
-polygons[2].name="bottom left";
-polygons[3].name="middle";
-polygons[4].name="right";
+polygons[0].name="fuel cap";
+polygons[1].name="wheel";
+polygons[2].name="side";
+polygons[3].name="window";
+polygons[4].name="roof";
+polygons[5].name="windscreen";
+polygons[6].name="bonnet";
 
 // thanks to http://stackoverflow.com/a/17490457 for this function
 function insidePoly(pointx, pointy) {
@@ -131,21 +210,7 @@ function drawSinglePoly(polygon){
 function drawPoly(){
   //reset the canvas
   canv.width=canv.width;
-
-  //draw lines for reference
-  ctx.beginPath();
-  ctx.moveTo(0,90);
-  ctx.lineTo(400,90);
-  ctx.moveTo(400,120);
-  ctx.lineTo(0,120);
-  ctx.moveTo(400,140);
-  ctx.lineTo(0,140);
-  ctx.moveTo(0,150);
-  ctx.lineTo(400,150);
-  ctx.moveTo(400,160);
-  ctx.lineTo(0,160);
-  ctx.strokeStyle="#c0c0c0";
-  ctx.stroke();
+  drawCar();
 
   //draw polygons
   polygons.forEach(function(polygon){
@@ -155,12 +220,16 @@ function drawPoly(){
       ctx.lineTo(vertex[0],vertex[1]);
     });
     ctx.lineTo(polygon[0][0],polygon[0][1]);
-    ctx.strokeStyle="#000000";
+    ctx.strokeStyle="#0000FF";
     ctx.stroke();
   });
 };
 
 document.onload = drawPoly();
+// if(carImageReady) {
+//   drawCar();
+// };
+
 </script>
 </body>
 </html>
