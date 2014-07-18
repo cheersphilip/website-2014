@@ -166,7 +166,7 @@ function insidePoly(pointx, pointy) {
 // but then I had to add in this function, as you can't exit a foreach.
 // It's a complicated way as I couldn't get this one to stop detecting hits
 // when the click was to the right (and outside) of a given polygon, so it's
-// only called after insidePoly.
+// only called after insidePoly returns true.
 function insideWhichPoly(pointx, pointy) {
   for (var k=0; k<polygons.length; k++){  
     var i,j;

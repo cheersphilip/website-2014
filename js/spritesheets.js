@@ -174,3 +174,14 @@ var sprites = new SpriteSheet({
       { name: 'walk_6', x: 124, y: 172  }
     ]
   });
+
+//bundle that into an array for convenience
+var spriteArray = [
+    fuelcap_sprites,
+    wheel_sprites,
+    side_sprites,
+    window_sprites,
+    roof_sprites,
+    windscreen_sprites,
+    bonnet_sprites
+]

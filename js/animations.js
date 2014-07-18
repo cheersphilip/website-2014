@@ -6,7 +6,7 @@ var wheelTest = new Animation([{ sprite: 'wheel_inv', time: 0.2 }], wheel_sprite
 var windowTest = new Animation([{ sprite: 'window_inv', time: 0.2 }], window_sprites);
 var windscreenTest = new Animation([{ sprite: 'windscreen_inv', time: 0.2 }], windscreen_sprites);
 
-var bonnet = new Animation([
+var bonnet_anim = new Animation([
     { sprite: 'bonnet_01', time: 0.2 },
     { sprite: 'bonnet_02', time: 0.2 },
     { sprite: 'bonnet_01', time: 0.2 },
@@ -19,7 +19,7 @@ var bonnet = new Animation([
     { sprite: 'bonnet_09', time: 0.1 }
   ], bonnet_sprites);
 
-var fuelcap = new Animation([
+var fuelcap_anim = new Animation([
     { sprite: 'fuelcap_01', time: 0.1 },
     { sprite: 'fuelcap_02', time: 0.1 },
     { sprite: 'fuelcap_03', time: 0.1 },
@@ -39,7 +39,7 @@ var fuelcap = new Animation([
     { sprite: 'fuelcap_17', time: 0.1 }
   ], fuelcap_sprites);
 
-var roof = new Animation([
+var roof_anim = new Animation([
     { sprite: 'roof_01', time: 1.1 },
     { sprite: 'roof_02', time: 0.1 },
     { sprite: 'roof_03', time: 0.1 },
@@ -55,7 +55,7 @@ var roof = new Animation([
     // { sprite: 'roof_13', time: 0.1 }
   ], roof_sprites);
 
-var side = new Animation([
+var side_anim = new Animation([
     { sprite: 'side_01', time: 0.2 },
     { sprite: 'side_02', time: 0.2 },
     { sprite: 'side_03', time: 0.2 },
@@ -75,7 +75,7 @@ var side = new Animation([
     { sprite: 'side_17', time: 0.1 }
   ], side_sprites);
 
-var wheel = new Animation([
+var wheel_anim = new Animation([
     { sprite: 'wheel_01', time: 0.05 },
     { sprite: 'wheel_02', time: 0.05 },
     { sprite: 'wheel_03', time: 0.05 },
@@ -101,7 +101,7 @@ var wheel = new Animation([
   ], wheel_sprites);
 
 //note spelling of 'windo' to avoid conflict
-var windo = new Animation([
+var window_anim = new Animation([
     { sprite: 'window_01', time: 0.1 },
     { sprite: 'window_02', time: 0.1 },
     { sprite: 'window_03', time: 0.1 },
@@ -123,7 +123,7 @@ var windo = new Animation([
     { sprite: 'window_19', time: 0.1 }
   ], window_sprites);
 
-var windscreen = new Animation([
+var windscreen_anim = new Animation([
     { sprite: 'windscreen_01', time: 0.1 },
     { sprite: 'windscreen_02', time: 0.1 },
     { sprite: 'windscreen_03', time: 0.1 },
@@ -162,3 +162,14 @@ var walk = new Animation([
     { sprite: 'walk_6', time: 0.1 },
     { sprite: 'stand', time: 0.05 }
   ], sprites);
+
+//bundle that into an array for convenience
+var animArray = [
+    fuelcap_anim,
+    wheel_anim,
+    side_anim,
+    window_anim,
+    roof_anim,
+    windscreen_anim,
+    bonnet_anim
+];
