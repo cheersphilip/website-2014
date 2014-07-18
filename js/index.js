@@ -7,13 +7,27 @@ document.body.appendChild(canvas);
 
 //setup & draw the background
 var carImage = new Image();
+var carImageReady = false;
 carImage.src = 'img/mycar.jpg';
 function drawCar(){
 	ctx.drawImage(carImage, 0, 0, 1155, 832);
 }
 carImage.onload = function() {
-  drawCar();
+	initialise();
 }
+function drawTitle(){
+	ctx.font='72px "Cabin Sketch"';
+	ctx.textAlign="center";
+	ctx.textBaseline="top"; 
+	ctx.fillText("Why this website is like my car...",canvas.width/2,80);
+}
+function initialise(){
+	drawCar();
+	drawTitle();
+}
+
+//set up various variables
+var timer = new FrameTimer();
 
 //hit detection goes here
 
@@ -31,7 +45,7 @@ function insidePoly(pointx, pointy) {
 // but then I had to add in this function, as you can't exit a foreach.
 // It's a complicated way as I couldn't get this one to stop detecting hits
 // when the click was to the right (and outside) of a given polygon, so it's
-// only called after insidePoly returns true.
+// only called after insidePoly returns true. Not exactly DRY, but hey...
 function insideWhichPoly(pointx, pointy) {
   for (var k=0; k<polygons.length; k++){  
     var i,j;
@@ -47,22 +61,16 @@ function insideWhichPoly(pointx, pointy) {
 }
 
 function doHitDetection(e){
-	var n, goodToGo = true;
+	var n;
 	var xpos = e.clientX-canvas.offsetLeft;
 	var ypos = e.clientY-canvas.offsetTop;
 	if (insidePoly(xpos,ypos)) {
 		n = insideWhichPoly(xpos,ypos);
-		// check if anything is running
-		//might want to do this globally 
-		//i.e. if anything is unning it sets 'running' to true
-		carPartArray.forEach(function(part){
-			if (part.animating || part.complete) {
-				goodToGo = false;
-			}
-		})
 		//run the right anim
-		if (goodToGo) {
-
+		if (goodToGo(n)) {
+			//run animation for n
+			console.log(carPartArray[n].name);
+			carPartArray[n].zing();
 		}
   }
 };
@@ -70,8 +78,23 @@ function doHitDetection(e){
 canvas.addEventListener("touchend", function(e){doHitDetection(e)}, false);
 canvas.addEventListener("click", function(e){doHitDetection(e)}, false);
 
+//check if anything is already running or if a specific animation is complete
+function goodToGo(index){
+	var good = true;
+	if (carPartArray[index].complete){
+		good = false;		
+	} else {
+		carPartArray.forEach(function(part){
+			if (part.animating) {
+				good = false;
+			}
+		})
+	}
+	return good;
+}
 
-//set up the names of things in an array so it's DRY
+
+//set up the names etc. of things in an array so it's DRY
 var names = [
 	"fuelcap",
 	"wheel",
@@ -87,7 +110,7 @@ var blurbs = [
 	"Not exactly stylish (but does the job)",
 	"Lots of room for a child inside",
 	"Just wish it were a convertible",
-	"You can tell a lot about the owner",
+	"You can probably tell a lot about the owner",
 	"Easy to peek under the hood, see what's going on"
 ];
 var carPartArray = [];
@@ -107,6 +130,26 @@ function carPart(index){
 	this.sprite = spriteArray[index];
 	this.animating = false;
 	this.complete = false;
+	this.zing = function(){
+	    window.requestAnimationFrame(function(){
+			this.anim.animate(timer.getSeconds());
+			var frame = this.sprite.getSprite();
+			drawCar();
+			ctx.drawImage(this.image, frame.x, frame.y, 278, 122, 537, 263, 278, 122);
+			timer.tick();
+			drawTitle();
+			this.animating = true;
+			if(this.anim._frameIndex === this.anim._frames.length-1) {
+				this.anim._frameIndex = 0;
+				this.animating = false;
+				this.complete = false;
+				return;
+			}
+			if(this.animating){
+				this.zing();
+			}
+		});
+	};
 	this.blurb = blurbs[index];
  	carPartArray.push(this);
 }
@@ -119,4 +162,17 @@ var Roof = new carPart(4);
 var Windscreen = new carPart(5);
 var Bonnet = new carPart(6);
 
-// console.log(carPartArray[0].name);
+console.log(carPartArray.length);
+
+//reload the page if the window gets resized
+window.onresize = function(){
+	window.location.reload(false);
+}
+window.ondeviceorientation = function(){
+	window.location.reload(false);	
+}
+
+document.onload = function(){
+	initialise();
+	timer.tick();
+}
