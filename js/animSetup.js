@@ -1,3 +1,6 @@
+//thanks to Jani, the author of this article for the following code
+//http://codeutopia.net/blog/2009/08/21/using-canvas-to-do-bitmap-sprite-animation-in-javascript/
+
 /**********************************/
 var FrameTimer = function() {
     this._lastTick = (new Date()).getTime();

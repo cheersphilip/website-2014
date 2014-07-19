@@ -175,13 +175,3 @@ var sprites = new SpriteSheet({
     ]
   });
 
-//bundle that into an array for convenience
-var spriteArray = [
-    fuelcap_sprites,
-    wheel_sprites,
-    side_sprites,
-    window_sprites,
-    roof_sprites,
-    windscreen_sprites,
-    bonnet_sprites
-]

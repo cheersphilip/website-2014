@@ -129,17 +129,17 @@ var windscreen_anim = new Animation([
     { sprite: 'windscreen_03', time: 0.1 },
     { sprite: 'windscreen_04', time: 0.1 },
     { sprite: 'windscreen_05', time: 0.1 },
-    { sprite: 'windscreen_06', time: 1.4 },
-    { sprite: 'windscreen_07', time: 0.8 },
+    { sprite: 'windscreen_06', time: 0.8 },
+    { sprite: 'windscreen_07', time: 0.5 },
     { sprite: 'windscreen_08', time: 0.1 },
     { sprite: 'windscreen_07', time: 0.8 },
     { sprite: 'windscreen_08', time: 0.1 },
     { sprite: 'windscreen_07', time: 0.6 },
-    { sprite: 'windscreen_06', time: 1.8 },
-    { sprite: 'windscreen_07', time: 0.8 },
-    { sprite: 'windscreen_08', time: 0.2 },
-    { sprite: 'windscreen_07', time: 1.6 },
-    { sprite: 'windscreen_06', time: 0.1 }
+    { sprite: 'windscreen_06', time: 0.1 }//,
+    // { sprite: 'windscreen_07', time: 0.8 },
+    // { sprite: 'windscreen_08', time: 0.2 },
+    // { sprite: 'windscreen_07', time: 1.6 },
+    // { sprite: 'windscreen_06', time: 0.1 }
   ], windscreen_sprites);
 
 //the default moonwalker anim
@@ -163,13 +163,3 @@ var walk = new Animation([
     { sprite: 'stand', time: 0.05 }
   ], sprites);
 
-//bundle that into an array for convenience
-var animArray = [
-    fuelcap_anim,
-    wheel_anim,
-    side_anim,
-    window_anim,
-    roof_anim,
-    windscreen_anim,
-    bonnet_anim
-];
