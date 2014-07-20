@@ -20,19 +20,14 @@ carImage.onload = function() {
 	initialise();
 }
 
-//preload the title text as per http://stackoverflow.com/questions/2756575/drawing-text-to-canvas-with-font-face-does-not-work-at-the-first-time/8223555#8223555
-var link = document.createElement('link');
-link.rel = 'stylesheet';
-link.type = 'text/css';
-link.href = 'http://fonts.googleapis.com/css?family=Cabin+Sketch';
-document.getElementsByTagName('head')[0].appendChild(link);
-
 function drawTitle(){
 	ctx.font='72px "Cabin Sketch"';
 	ctx.textAlign="center";
 	ctx.textBaseline="top"; 
 	ctx.fillText("Why this website is like my car...",canvas.width/2,80);
 }
+window.setTimeout(initialise,1000);
+
 function initialise(){
 	canvas.width = canvas.width;
 	drawCar();
@@ -274,7 +269,6 @@ console.log(carPartArray.length);
 
 // The loop that checks if you need a hint - thank you LOST DECADE GAMES!
 function checkingUpOnYou() {
-	initialise(); //just beacuse the stupid font thing doesn't work
 	var now = Date.now();
 	if (!userInput && (now - pageLoad > 5000)) {
 		pageLoad = now;
@@ -286,7 +280,6 @@ function checkingUpOnYou() {
 	requestAnimationFrame(checkingUpOnYou);
 };
 
-// document.load = (initialise());
 var pageLoad = Date.now();
 checkingUpOnYou();
 
