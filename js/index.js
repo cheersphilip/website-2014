@@ -1,3 +1,7 @@
+// The Paul Irish polyfill for requestAnimationFrame
+var w = window;
+requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+
 // Create the canvas
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
@@ -15,6 +19,14 @@ function drawCar(){
 carImage.onload = function() {
 	initialise();
 }
+
+//preload the title text as per http://stackoverflow.com/questions/2756575/drawing-text-to-canvas-with-font-face-does-not-work-at-the-first-time/8223555#8223555
+var link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = 'http://fonts.googleapis.com/css?family=Cabin+Sketch';
+document.getElementsByTagName('head')[0].appendChild(link);
+
 function drawTitle(){
 	ctx.font='72px "Cabin Sketch"';
 	ctx.textAlign="center";
@@ -22,12 +34,16 @@ function drawTitle(){
 	ctx.fillText("Why this website is like my car...",canvas.width/2,80);
 }
 function initialise(){
+	canvas.width = canvas.width;
 	drawCar();
 	drawTitle();
 }
 
 //set up various variables
 var timer = new FrameTimer();
+var needHelp = false;
+var userInput = false;
+var lastUserInput;
 
 //hit detection goes here
 
@@ -61,6 +77,8 @@ function insideWhichPoly(pointx, pointy) {
 }
 
 function doHitDetection(e){
+	userInput = true;
+	lastUserInput = Date.now();
 	var n;
 	var xpos = e.clientX-canvas.offsetLeft;
 	var ypos = e.clientY-canvas.offsetTop;
@@ -72,7 +90,7 @@ function doHitDetection(e){
 			console.log(carPartArray[n].name);
 			carPartArray[n].zing();
 		}
-  }
+	}
 };
 
 canvas.addEventListener("touchend", function(e){doHitDetection(e)}, false);
@@ -124,6 +142,16 @@ var animArray = [
     windscreen_anim,
     bonnet_anim
 ];
+//array of hint animations (1 frame) from animations.js
+var hints = [
+    fuelcapTest,
+    wheelTest,
+    sideTest,
+    windowTest,
+    roofTest,
+    windscreenTest,
+    bonnetTest
+];
 //spritesheet array from spritesheet.js
 var spriteArray = [
     fuelcap_sprites,
@@ -153,27 +181,21 @@ function carPart(index, w, h, offsetx, offsety){
 	this.anim = animArray[index];
 	this.sprite = spriteArray[index];
 	this.blurb = blurbs[index];
+	this.hint = hints[index];
  	carPartArray.push(this);
 }
 
 carPart.prototype.zing = function(){
 	var me = this;
 
-    window.requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
 		me.anim.animate(timer.getSeconds());
 		var frame = me.anim.getSprite();
 		//might need to reset the canvas here?
 		drawCar();
 		ctx.drawImage(me.image, frame.x, frame.y, me.w, me.h, me.offsetx, me.offsety, me.w, me.h);
-		//TODO: draw the blurb. Could be a separate function?
-		carPartArray.forEach(function(part){
-			if (part.anim._completed) {
-				part.anim._frameIndex = part.anim._frames.length - 1; 
-				var myframe = part.anim.getSprite();
-				ctx.drawImage(part.image, myframe.x, myframe.y, part.w, part.h, part.offsetx, part.offsety, part.w, part.h);
-				//TODO: will also need to draw the blurbs here
-			};
-		});
+		//TODO: tween the blurb. Could be a separate function?
+		drawCurrentState();
 		drawTitle();
 		timer.tick();
 		me.anim._active = true;
@@ -187,6 +209,49 @@ carPart.prototype.zing = function(){
 			me.zing();
 		}
 	});
+};
+
+function drawCurrentState(){
+	carPartArray.forEach(function(part){
+		if (part.anim._completed) {
+			part.anim._frameIndex = part.anim._frames.length - 1; 
+			var myframe = part.anim.getSprite();
+			ctx.drawImage(part.image, myframe.x, myframe.y, part.w, part.h, part.offsetx, part.offsety, part.w, part.h);
+			//TODO: will also need to draw the completed blurbs here
+		};
+	});
+};
+
+var hintIterator = 0;
+function showHint(){
+	var part = carPartArray[hintIterator];
+	console.log("Hint: " + part.name + " " + part.anim._completed);
+	if (part.anim._active || part.anim._completed) {
+		hintIterator++;
+		if (hintIterator < carPartArray.length) {
+			showHint();
+		} else {
+			ctx.font='36px "Cabin Sketch"';
+			ctx.textAlign="center";
+			ctx.textBaseline="top"; 
+			ctx.fillText("That's the lot!",canvas.width/2,180);
+		}
+	} else {
+		ctx.drawImage(part.image, 0, 0, part.w, part.h, part.offsetx, part.offsety, part.w, part.h);
+		delayThat = window.setTimeout(function(){
+			hintIterator++;
+			initialise();
+			drawCurrentState();
+			if (hintIterator < carPartArray.length) {
+				showHint();
+			} else {
+				hintIterator = 0;
+				window.clearTimeout(delayThat);
+				initialise();
+				drawCurrentState();
+			}
+		}, 100);
+	};
 };
 
 var Fuelcap = new carPart(0, 70, 102, 276, 314);
@@ -207,7 +272,21 @@ console.log(carPartArray.length);
 // 	window.location.reload(false);	
 // }
 
-document.onload = function(){
-	initialise();
-	timer.tick();
-}
+// The loop that checks if you need a hint - thank you LOST DECADE GAMES!
+function checkingUpOnYou() {
+	initialise(); //just beacuse the stupid font thing doesn't work
+	var now = Date.now();
+	if (!userInput && (now - pageLoad > 5000)) {
+		pageLoad = now;
+		showHint();
+	} else if (now - lastUserInput > 5000) {
+		lastUserInput = now;
+		showHint();
+	};
+	requestAnimationFrame(checkingUpOnYou);
+};
+
+// document.load = (initialise());
+var pageLoad = Date.now();
+checkingUpOnYou();
+
