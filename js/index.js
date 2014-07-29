@@ -120,11 +120,11 @@ var names = [
 ];
 var blurbs = [
 	{text:"Old school fuel source",x:20,y:350},
-	{text:"Definitely not RWD",x:10,y:450},
-	{text:"Not exactly stylish (but does the job)",x:90,y:530},
+	{text:"No need for RWD",x:50,y:450},
+	{text:"Not your usual flavour of cool",x:90,y:530},
 	{text:"Lots of room for a child inside",x:0,y:230},
-	{text:"Just wish it were a convertible",x:550,y:190},
-	{text:"You can tell a lot about the owner",x:700,y:250},
+	{text:"Helluvalotta fun!",x:550,y:190},
+	{text:"You can see me in it :)",x:700,y:250},
 	{text:"Peek inside, see how it works",x:800,y:300}
 ];
 var carPartArray = [];
