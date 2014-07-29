@@ -3,7 +3,7 @@ var w = window;
 requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
 
 // Create the canvas
-var canvas = document.createElement("canvas");
+var canvas = document.createElement("canvas"); 
 var ctx = canvas.getContext("2d");
 canvas.width = 1155;
 canvas.height = 832;
@@ -23,6 +23,7 @@ carImage.onload = function() {
 function drawTitle(){
 	ctx.font='72px "Cabin Sketch"';
 	ctx.textAlign="center";
+	ctx.fillStyle="rgb(0,0,0)";
 	ctx.textBaseline="top"; 
 	ctx.fillText("Why this website is like my car...",canvas.width/2,80);
 }
@@ -118,13 +119,13 @@ var names = [
 	"bonnet"
 ];
 var blurbs = [
-	"Old school fuel source",
-	"Definitely not RWD",
-	"Not exactly stylish (but does the job)",
-	"Lots of room for a child inside",
-	"Just wish it were a convertible",
-	"You can probably tell a lot about the owner",
-	"Easy to peek under the hood, see what's going on"
+	{text:"Old school fuel source",x:20,y:350},
+	{text:"Definitely not RWD",x:10,y:450},
+	{text:"Not exactly stylish (but does the job)",x:90,y:530},
+	{text:"Lots of room for a child inside",x:0,y:230},
+	{text:"Just wish it were a convertible",x:550,y:190},
+	{text:"You can tell a lot about the owner",x:700,y:250},
+	{text:"Peek inside, see how it works",x:800,y:300}
 ];
 var carPartArray = [];
 //animation array from animations.js
@@ -190,6 +191,8 @@ carPart.prototype.zing = function(){
 		drawCar();
 		ctx.drawImage(me.image, frame.x, frame.y, me.w, me.h, me.offsetx, me.offsety, me.w, me.h);
 		//TODO: tween the blurb. Could be a separate function?
+		var transparency = (1/me.anim._frames.length)*me.anim._frameIndex;
+		me.blurbShow(transparency);
 		drawCurrentState();
 		drawTitle();
 		timer.tick();
@@ -206,18 +209,28 @@ carPart.prototype.zing = function(){
 	});
 };
 
+carPart.prototype.blurbShow = function(alpha){
+	ctx.font='24px "Gloria Hallelujah"';
+	ctx.textAlign="left";
+	ctx.fillStyle="rgba(0,0,0," + alpha + ")";
+	ctx.textBaseline="top"; 
+	ctx.fillText(this.blurb.text,this.blurb.x,this.blurb.y);
+	
+}
+
 function drawCurrentState(){
 	carPartArray.forEach(function(part){
 		if (part.anim._completed) {
 			part.anim._frameIndex = part.anim._frames.length - 1; 
 			var myframe = part.anim.getSprite();
 			ctx.drawImage(part.image, myframe.x, myframe.y, part.w, part.h, part.offsetx, part.offsety, part.w, part.h);
-			//TODO: will also need to draw the completed blurbs here
+			part.blurbShow(1);
 		};
 	});
 };
 
 var hintIterator = 0;
+
 function showHint(){
 	var part = carPartArray[hintIterator];
 	console.log("Hint: " + part.name + " " + part.anim._completed);
@@ -225,11 +238,13 @@ function showHint(){
 		hintIterator++;
 		if (hintIterator < carPartArray.length) {
 			showHint();
-		} else {
-			ctx.font='36px "Cabin Sketch"';
-			ctx.textAlign="center";
+		} else if (!part.anim._active){
+			ctx.font='36px "Gloria Hallelujah"';
+			ctx.textAlign="left";
 			ctx.textBaseline="top"; 
-			ctx.fillText("That's the lot!",canvas.width/2,180);
+			ctx.fillText("That's the lot!",885,350);
+			ctx.font='20px "Gloria Hallelujah"';
+			ctx.fillText("Thanks for visiting :)",910,400);
 		}
 	} else {
 		ctx.drawImage(part.image, 0, 0, part.w, part.h, part.offsetx, part.offsety, part.w, part.h);
@@ -270,10 +285,10 @@ console.log(carPartArray.length);
 // The loop that checks if you need a hint - thank you LOST DECADE GAMES!
 function checkingUpOnYou() {
 	var now = Date.now();
-	if (!userInput && (now - pageLoad > 5000)) {
+	if (!userInput && (now - pageLoad > 7000)) {
 		pageLoad = now;
 		showHint();
-	} else if (now - lastUserInput > 5000) {
+	} else if (now - lastUserInput > 7000) {
 		lastUserInput = now;
 		showHint();
 	};
