@@ -40,6 +40,8 @@ var timer = new FrameTimer();
 var needHelp = false;
 var userInput = false;
 var lastUserInput;
+var hintIterator = 0;
+var delayThat;
 
 //hit detection goes here
 
@@ -85,12 +87,31 @@ function doHitDetection(e){
 			//run animation for n
 			console.log(carPartArray[n].name);
 			carPartArray[n].zing();
-		}
+		} else if (carPartArray[n].name == "bonnet") {
+			window.open('js/index.js');
+		} 
 	}
 };
 
+function adjustCursor(e){
+	var xpos = e.clientX-canvas.offsetLeft;
+	var ypos = e.clientY-canvas.offsetTop;
+	if (insidePoly(xpos,ypos)) {
+		var n = insideWhichPoly(xpos,ypos);
+		if (goodToGo(n)){
+			canvas.style.cursor="pointer";
+		} else if (carPartArray[n].name == "bonnet") {
+			canvas.style.cursor="pointer";
+			//TODO: if you click or touch it should to take you to the code
+		} 
+	} else {
+		canvas.style.cursor="default";
+	};
+}
+
 canvas.addEventListener("touchend", function(e){doHitDetection(e)}, false);
 canvas.addEventListener("click", function(e){doHitDetection(e)}, false);
+canvas.addEventListener("mousemove", function(e){adjustCursor(e)}, false);
 
 //check if anything is already running or if a specific animation is complete
 function goodToGo(index){
@@ -229,22 +250,17 @@ function drawCurrentState(){
 	});
 };
 
-var hintIterator = 0;
 
 function showHint(){
 	var part = carPartArray[hintIterator];
 	console.log("Hint: " + part.name + " " + part.anim._completed);
+	console.log(hintIterator);
 	if (part.anim._active || part.anim._completed) {
 		hintIterator++;
 		if (hintIterator < carPartArray.length) {
 			showHint();
-		} else if (!part.anim._active){
-			ctx.font='36px "Gloria Hallelujah"';
-			ctx.textAlign="left";
-			ctx.textBaseline="top"; 
-			ctx.fillText("That's the lot!",885,350);
-			ctx.font='20px "Gloria Hallelujah"';
-			ctx.fillText("Thanks for visiting :)",910,400);
+		} else if (finished()){
+			theEnd();
 		}
 	} else {
 		ctx.drawImage(part.image, 0, 0, part.w, part.h, part.offsetx, part.offsety, part.w, part.h);
@@ -254,15 +270,41 @@ function showHint(){
 			drawCurrentState();
 			if (hintIterator < carPartArray.length) {
 				showHint();
-			} else {
-				hintIterator = 0;
-				window.clearTimeout(delayThat);
-				initialise();
-				drawCurrentState();
+			} else if (finished()){
+				theEnd();
 			}
 		}, 100);
 	};
 };
+
+function finished(){
+	var completeCount = 0;
+	carPartArray.forEach(function(part){
+		if (part.anim._completed) {
+			completeCount++;
+		};
+	})
+	if (completeCount===carPartArray.length) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function theEnd(){
+	hintIterator = 0;
+	window.clearTimeout(delayThat);
+	initialise();
+	drawCurrentState();
+	ctx.fillStyle = '#FF3300';
+	ctx.font='36px "Gloria Hallelujah"';
+	ctx.textAlign="left";
+	ctx.textBaseline="top"; 
+	ctx.fillText("That's the lot!",885,350);
+	ctx.font='20px "Gloria Hallelujah"';
+	ctx.fillText("Thanks for visiting :)",910,400);
+
+}
 
 var Fuelcap = new carPart(0, 70, 102, 276, 314);
 var Wheel = new carPart(1, 139, 103, 242, 416);
