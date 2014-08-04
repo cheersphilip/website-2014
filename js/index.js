@@ -1,3 +1,8 @@
+//Thanks for checking out the code! 
+// All sources have been attributed, otherwise all my own work :)
+// Hit me up on Twitter @cheersphilip if you like what you see.
+
+
 // The Paul Irish polyfill for requestAnimationFrame
 var w = window;
 requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
@@ -43,7 +48,9 @@ var lastUserInput;
 var hintIterator = 0;
 var delayThat;
 
-//hit detection goes here
+// thanks to everyone in the LDG forum for their help with the following two functions!
+// http://forum.lostdecadegames.com/topic/165/polygonal-mouseover-in-canvas-help
+// This is basically the tricky part of this app. To see it in more detail, go to mycar/SAT-test.html
 
 // thanks to http://stackoverflow.com/a/17490457 for this function
 function insidePoly(pointx, pointy) {
@@ -56,7 +63,7 @@ function insidePoly(pointx, pointy) {
   })
   return inside;
 }
-// but then I had to add in this function, as you can't exit a foreach.
+// but then I had to add in this function. below, as you can't exit a foreach.
 // It's a complicated way as I couldn't get this one to stop detecting hits
 // when the click was to the right (and outside) of a given polygon, so it's
 // only called after insidePoly returns true. Not exactly DRY, but hey...
@@ -74,6 +81,7 @@ function insideWhichPoly(pointx, pointy) {
   }
 }
 
+// check if anything has been hit and if so, what
 function doHitDetection(e){
 	userInput = true;
 	lastUserInput = Date.now();
@@ -85,7 +93,6 @@ function doHitDetection(e){
 		//run the right anim
 		if (goodToGo(n)) {
 			//run animation for n
-			console.log(carPartArray[n].name);
 			carPartArray[n].zing();
 		} else if (carPartArray[n].name == "bonnet") {
 			window.open('js/index.js');
@@ -93,6 +100,7 @@ function doHitDetection(e){
 	}
 };
 
+// change the cursor into a pointer if it's over anything interesting
 function adjustCursor(e){
 	var xpos = e.clientX-canvas.offsetLeft;
 	var ypos = e.clientY-canvas.offsetTop;
@@ -109,6 +117,7 @@ function adjustCursor(e){
 	};
 }
 
+// start listening for interactions
 canvas.addEventListener("touchend", function(e){doHitDetection(e)}, false);
 canvas.addEventListener("click", function(e){doHitDetection(e)}, false);
 canvas.addEventListener("mousemove", function(e){adjustCursor(e)}, false);
@@ -127,7 +136,6 @@ function goodToGo(index){
 	}
 	return good;
 }
-
 
 //set up the names etc. of things in an array so it's DRY
 var names = [
@@ -253,8 +261,6 @@ function drawCurrentState(){
 
 function showHint(){
 	var part = carPartArray[hintIterator];
-	console.log("Hint: " + part.name + " " + part.anim._completed);
-	console.log(hintIterator);
 	if (part.anim._active || part.anim._completed) {
 		hintIterator++;
 		if (hintIterator < carPartArray.length) {
@@ -314,9 +320,7 @@ var Roof = new carPart(4, 256, 57, 393, 229);
 var Windscreen = new carPart(5, 278, 122, 537, 263);
 var Bonnet = new carPart(6, 233, 109, 644, 359);
 
-console.log(carPartArray.length);
-
-//reload the page if the window gets resized
+//reload the page if the window gets resized - too buggy to implement
 // window.onresize = function(){
 // 	window.location.reload(false);
 // }
@@ -324,7 +328,8 @@ console.log(carPartArray.length);
 // 	window.location.reload(false);	
 // }
 
-// The loop that checks if you need a hint - thank you LOST DECADE GAMES!
+// The loop that checks if you need a hint - this is basically a game loop
+// http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
 function checkingUpOnYou() {
 	var now = Date.now();
 	if (!userInput && (now - pageLoad > 7000)) {
